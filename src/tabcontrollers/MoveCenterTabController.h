@@ -131,6 +131,10 @@ class MoveCenterTabController : public QObject
             setUniverseCenteredRotation NOTIFY universeCenteredRotationChanged )
     Q_PROPERTY(
         float dragMult READ dragMult WRITE setDragMult NOTIFY dragMultChanged )
+    Q_PROPERTY( float dragMult2 READ dragMult2 WRITE setDragMult2 NOTIFY
+                    dragMult2Changed )
+    Q_PROPERTY( float dragMult3 READ dragMult3 WRITE setDragMult3 NOTIFY
+                    dragMult3Changed )
 
 private:
     OverlayController* parent;
@@ -151,6 +155,8 @@ private:
     bool m_moveShortcutLeftPressed = false;
     vr::TrackedDeviceIndex_t m_activeMoveController;
     float m_lastControllerPosition[3];
+    // accumulated path length for current drag gesture
+    double m_dragPathLength = 0.0;
     bool m_heightToggle = false;
     float m_gravityFloor = 0.0f;
     bool m_ignoreChaperoneState = false;
@@ -258,6 +264,8 @@ public:
     float gravityStrength() const;
     float flingStrength() const;
     float dragMult() const;
+    float dragMult2() const;
+    float dragMult3() const;
     bool gravityActive() const;
     bool momentumSave() const;
     bool lockXToggle() const;
@@ -333,6 +341,8 @@ public slots:
     void setGravityStrength( float value, bool notify = true );
     void setFlingStrength( float value, bool notify = true );
     void setDragMult( float value, bool notify = true );
+    void setDragMult2( float value, bool notify = true );
+    void setDragMult3( float value, bool notify = true );
     void setGravityActive( bool value, bool notify = true );
     void setMomentumSave( bool value, bool notify = true );
 
@@ -381,6 +391,8 @@ signals:
     void gravityStrengthChanged( float value );
     void flingStrengthChanged( float value );
     void dragMultChanged( float value );
+    void dragMult2Changed( float value );
+    void dragMult3Changed( float value );
     void gravityActiveChanged( bool value );
     void momentumSaveChanged( bool value );
     void requireLockXChanged( bool value );
