@@ -7,7 +7,28 @@
 
 [![Discord Shield](https://discordapp.com/api/guilds/593808397304987648/widget.png?style=shield)](https://discordapp.com/invite/cW6cRyv)
 
-# OpenVR Advanced Settings Overlay
+# OpenVR Advanced Settings Overlay with progressive space mover
+
+Added a progressive spacemover. The further the controller moves within a single drag, the faster it moves. This results in high positioning accuracy with small movements, while larger movements make it easier to cover long distances. Try my settings: 1/20/1. Sorry, I've never worked with GitHub, so I simply replaced the files:
+MoveCenterTabController.cpp
+SpaceDragGroupBox.qml
+MoveCenterTabController.h
+settings_controller.h
+settings.h
+![Example Screenshot](docs/screenshots/MotionPage2.jpeg)
+
+
+
+
+
+
+
+
+
+
+
+
+
 Adds an overlay to the OpenVR dashboard that allows access to advanced settings and useful utilities.
 
 ![Example Screenshot](docs/screenshots/InVRScreenshot.png)
