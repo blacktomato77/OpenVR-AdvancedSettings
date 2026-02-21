@@ -95,7 +95,7 @@ GroupBox {
             }
 
             MyText {
-                text: "Drag Multiplier:"
+                text: "Initial speed:"
                 horizontalAlignment: Text.AlignRight
                 Layout.rightMargin: 2
             }
@@ -121,27 +121,118 @@ GroupBox {
 
             MyPushButton2 {
                 Layout.preferredWidth: 50
-                text: "1x"
+                text: "+"
                 onClicked: {
-                    MoveCenterTabController.dragMult = 1.0
+                    MoveCenterTabController.dragMult = MoveCenterTabController.dragMult + 1.0
                 }
             }
 
             MyPushButton2 {
                 Layout.preferredWidth: 50
-                text: "2x"
+                text: "-"
                 onClicked: {
-                    MoveCenterTabController.dragMult = 2.0
+                    MoveCenterTabController.dragMult = MoveCenterTabController.dragMult - 1.0
+                }
+            }
+
+        }
+
+        RowLayout{
+
+            Item{
+                Layout.fillWidth: true
+            }
+
+            MyText {
+                text: "Full speed:"
+                horizontalAlignment: Text.AlignRight
+                Layout.rightMargin: 2
+            }
+
+            MyTextField {
+                id: dragMult2Text
+                text: "1.0"
+                keyBoardUID: 158
+                Layout.preferredWidth: 120
+                Layout.leftMargin: 10
+                Layout.rightMargin: 10
+                horizontalAlignment: Text.AlignHCenter
+                function onInputEvent(input) {
+                    var val = parseFloat(input)
+                    if (!isNaN(val)) {
+                        MoveCenterTabController.dragMult2 = val.toFixed(2)
+                        text = MoveCenterTabController.dragMult2.toFixed(2)
+                    } else {
+                        text = MoveCenterTabController.dragMult2.toFixed(2)
+                    }
                 }
             }
 
             MyPushButton2 {
                 Layout.preferredWidth: 50
-                text: "3x"
+                text: "+"
                 onClicked: {
-                    MoveCenterTabController.dragMult = 3.0
+                    MoveCenterTabController.dragMult2 = MoveCenterTabController.dragMult2 + 1.0
                 }
             }
+
+            MyPushButton2 {
+                Layout.preferredWidth: 50
+                text: "-"
+                onClicked: {
+                    MoveCenterTabController.dragMult2 = MoveCenterTabController.dragMult2 - 1.0
+                }
+            }
+
+        }
+
+        RowLayout{
+
+            Item{
+                Layout.fillWidth: true
+            }
+
+            MyText {
+                text: "Progress multiplier:"
+                horizontalAlignment: Text.AlignRight
+                Layout.rightMargin: 2
+            }
+
+            MyTextField {
+                id: dragMult3Text
+                text: "1.0"
+                keyBoardUID: 159
+                Layout.preferredWidth: 120
+                Layout.leftMargin: 10
+                Layout.rightMargin: 10
+                horizontalAlignment: Text.AlignHCenter
+                function onInputEvent(input) {
+                    var val = parseFloat(input)
+                    if (!isNaN(val)) {
+                        MoveCenterTabController.dragMult3 = val.toFixed(2)
+                        text = MoveCenterTabController.dragMult3.toFixed(2)
+                    } else {
+                        text = MoveCenterTabController.dragMult3.toFixed(2)
+                    }
+                }
+            }
+
+            MyPushButton2 {
+                Layout.preferredWidth: 50
+                text: "+"
+                onClicked: {
+                    MoveCenterTabController.dragMult3 = MoveCenterTabController.dragMult3 + 1.0
+                }
+            }
+
+            MyPushButton2 {
+                Layout.preferredWidth: 50
+                text: "-"
+                onClicked: {
+                    MoveCenterTabController.dragMult3 = MoveCenterTabController.dragMult3 - 1.0
+                }
+            }
+
         }
     }
 
@@ -151,6 +242,8 @@ GroupBox {
         dragComfortSlider.value = MoveCenterTabController.dragComfortFactor
         dragBounds.checked = MoveCenterTabController.dragBounds
         dragMultText.text = MoveCenterTabController.dragMult.toFixed(2)
+        dragMult2Text.text = MoveCenterTabController.dragMult2.toFixed(2)
+        dragMult3Text.text = MoveCenterTabController.dragMult3.toFixed(2)
     }
 
     Connections {
@@ -170,6 +263,12 @@ GroupBox {
         }
         onDragMultChanged: {
             dragMultText.text = MoveCenterTabController.dragMult.toFixed(2)
+        }
+        onDragMult2Changed: {
+            dragMult2Text.text = MoveCenterTabController.dragMult2.toFixed(2)
+        }
+        onDragMult3Changed: {
+            dragMult3Text.text = MoveCenterTabController.dragMult3.toFixed(2)
         }
     }
 }
