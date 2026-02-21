@@ -718,9 +718,13 @@ float MoveCenterTabController::dragMult() const
 void MoveCenterTabController::setDragMult( float value, bool notify )
 {
     double valuesubmit = static_cast<double>( value );
-    if ( value > 20.0f )
+    if ( value > 30.0f )
     {
-        valuesubmit = 20.0;
+        valuesubmit = 30.0;
+    }
+    if ( value < 0.0f )
+    {
+        valuesubmit = 0.0;
     }
     settings::setSetting( settings::DoubleSetting::PLAYSPACE_dragMult,
                           static_cast<double>( valuesubmit ) );
@@ -728,6 +732,58 @@ void MoveCenterTabController::setDragMult( float value, bool notify )
     if ( notify )
     {
         emit dragMultChanged( value );
+    }
+}
+
+float MoveCenterTabController::dragMult2() const
+{
+    return static_cast<float>( settings::getSetting(
+        settings::DoubleSetting::PLAYSPACE_dragMult2 ) );
+}
+
+void MoveCenterTabController::setDragMult2( float value, bool notify )
+{
+    double valuesubmit = static_cast<double>( value );
+    if ( value > 30.0f )
+    {
+        valuesubmit = 30.0;
+    }
+    if ( value < 0.0f )
+    {
+        valuesubmit = 0.0;
+    }
+    settings::setSetting( settings::DoubleSetting::PLAYSPACE_dragMult2,
+                          static_cast<double>( valuesubmit ) );
+
+    if ( notify )
+    {
+        emit dragMult2Changed( value );
+    }
+}
+
+float MoveCenterTabController::dragMult3() const
+{
+    return static_cast<float>( settings::getSetting(
+        settings::DoubleSetting::PLAYSPACE_dragMult3 ) );
+}
+
+void MoveCenterTabController::setDragMult3( float value, bool notify )
+{
+    double valuesubmit = static_cast<double>( value );
+    if ( value > 30.0f )
+    {
+        valuesubmit = 30.0;
+    }
+    if ( value < 0.0f )
+    {
+        valuesubmit = 0.0;
+    }
+    settings::setSetting( settings::DoubleSetting::PLAYSPACE_dragMult3,
+                          static_cast<double>( valuesubmit ) );
+
+    if ( notify )
+    {
+        emit dragMult3Changed( value );
     }
 }
 
@@ -2179,6 +2235,8 @@ void MoveCenterTabController::updateHandDrag(
             // released
             m_lastGravityUpdateTimePoint = std::chrono::steady_clock::now();
         }
+        // reset accumulated drag path when drag is not active
+        m_dragPathLength = 0.0;
         m_lastMoveHand = m_activeDragHand;
         return;
     }
@@ -2217,6 +2275,12 @@ void MoveCenterTabController::updateHandDrag(
         static_cast<float>( relativeControllerPosition[2] ) + m_offsetZ,
     };
 
+    // if active drag hand just changed (new drag or hand swap), reset path length
+    if ( m_lastMoveHand != m_activeDragHand )
+    {
+        m_dragPathLength = 0.0;
+    }
+
     if ( m_lastMoveHand == m_activeDragHand )
     {
         double diff[3] = {
@@ -2229,10 +2293,29 @@ void MoveCenterTabController::updateHandDrag(
         };
 
         // offset is un-rotated coordinates
+        // accumulate total path length of this drag gesture
+        double stepDistance = std::sqrt(
+            ( diff[0] * diff[0] ) + ( diff[1] * diff[1] ) + ( diff[2] * diff[2] ) );
+        m_dragPathLength += stepDistance;
 
-        diff[0] = diff[0] * static_cast<double>( dragMult() );
-        diff[1] = diff[1] * static_cast<double>( dragMult() );
-        diff[2] = diff[2] * static_cast<double>( dragMult() );
+        double dynamicMult2Factor = 0.0;
+        float dragMult3Value = dragMult3();
+        if ( dragMult3Value > 0.0f )
+        {
+            dynamicMult2Factor
+                = std::clamp( m_dragPathLength
+                                  / static_cast<double>( dragMult3Value ),
+                              0.0,
+                              1.0 );
+        }
+
+        double dynamicDragMultiplier = static_cast<double>( dragMult() )
+                                       + static_cast<double>( dragMult2() )
+                                             * dynamicMult2Factor;
+
+        diff[0] = diff[0] * dynamicDragMultiplier;
+        diff[1] = diff[1] * dynamicDragMultiplier;
+        diff[2] = diff[2] * dynamicDragMultiplier;
 
         // prevent positional glitches from exceeding max openvr offset
         // clamps. We do this by detecting a drag larger than 100m in a
