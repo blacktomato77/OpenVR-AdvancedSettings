@@ -10,10 +10,10 @@
 # OpenVR Advanced Settings Overlay with progressive space mover
 
 Added a progressive spacemover. The further the controller moves within a single drag, the faster it moves. This results in high positioning accuracy with small movements, while larger movements make it easier to cover long distances. Try my settings: 1/20/1. Sorry, I've never worked with GitHub, so I simply replaced the files:
-MoveCenterTabController.cpp
-SpaceDragGroupBox.qml
-MoveCenterTabController.h
-settings_controller.h
+MoveCenterTabController.cpp,
+SpaceDragGroupBox.qml,
+MoveCenterTabController.h,
+settings_controller.h,
 settings.h
 ![Example Screenshot](docs/screenshots/MotionPage2.jpeg)
 
