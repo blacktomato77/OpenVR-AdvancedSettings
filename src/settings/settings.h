@@ -77,6 +77,8 @@ enum class DoubleSetting
     PLAYSPACE_gravityStrength,
     PLAYSPACE_flingStrength,
     PLAYSPACE_dragMult,
+    PLAYSPACE_dragMult2,
+    PLAYSPACE_dragMult3,
 
     APPLICATION_appVolume,
 
